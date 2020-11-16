@@ -6,8 +6,19 @@ import json
 cg = CoinGeckoAPI()
 time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-current_prices_usd = {coin['id']: coin['market_data']['current_price']['usd'] for coin in cg.get_coins()}
+# Get all info for top 50 coins
+coins = cg.get_coins()
 
-with open('./prices.txt', 'a') as file:
+# Update decoder file with coin symbols/names
+with open('decoder.txt', 'r+') as file:
+    old_codes = json.load(file)        
+    new_codes = {coin['symbol']: coin['id'] for coin in coins}   
+    json.dump({**old_codes, **new_codes}, file)
+
+# Get current prices for top 50 coins in USD
+current_prices_usd = {coin['symbol']: coin['market_data']['current_price']['usd'] for coin in coins}
+
+# Dump current price data
+with open('prices.txt', 'a') as file:
     file.write('\n')
     json.dump({time: current_prices_usd}, file)
