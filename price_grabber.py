@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 from pycoingecko import CoinGeckoAPI
 from datetime import datetime
 import json
